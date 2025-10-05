@@ -89,6 +89,11 @@ mvn spring-boot:run
 - **Swagger UI:** http://localhost:8080/swagger-ui.html
 - **OpenAPI JSON:** http://localhost:8080/api-docs
 
+### Для фронтенд-разработчиков
+
+- **[Frontend Integration Guide](docs/frontend-integration.md)** - полное руководство по интеграции с API
+- **[API Examples](docs/api-examples.md)** - практические примеры использования всех endpoints
+
 ## 🔐 Аутентификация
 
 ### Регистрация пользователя
