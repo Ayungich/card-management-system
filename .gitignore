@@ -46,3 +46,8 @@ logs/
 ### OS ###
 .DS_Store
 Thumbs.db
+
+### Documentation ###
+docs/plan.md
+docs/requirements.md
+docs/architecture-rule.md
