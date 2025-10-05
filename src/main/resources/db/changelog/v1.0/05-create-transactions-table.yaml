@@ -1,0 +1,90 @@
+databaseChangeLog:
+  - changeSet:
+      id: 05-create-transactions-table
+      author: ayungich
+      changes:
+        - createTable:
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: from_card_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: to_card_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: decimal(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: failure_reason
+                  type: varchar(500)
+              - column:
+                  name: timestamp
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: from_card_id
+            constraintName: fk_transactions_from_card_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: transactions
+            baseColumnNames: to_card_id
+            constraintName: fk_transactions_to_card_id
+            referencedTableName: cards
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createIndex:
+            tableName: transactions
+            indexName: idx_transaction_from_card
+            columns:
+              - column:
+                  name: from_card_id
+
+        - createIndex:
+            tableName: transactions
+            indexName: idx_transaction_to_card
+            columns:
+              - column:
+                  name: to_card_id
+
+        - createIndex:
+            tableName: transactions
+            indexName: idx_transaction_timestamp
+            columns:
+              - column:
+                  name: timestamp
+
+        - sql:
+            sql: ALTER TABLE transactions ADD CONSTRAINT chk_transactions_amount_positive CHECK (amount > 0)
+
+        - sql:
+            sql: ALTER TABLE transactions ADD CONSTRAINT chk_transactions_status CHECK (status IN ('SUCCESS', 'FAILED'))
+
+      rollback:
+        - dropTable:
+            tableName: transactions

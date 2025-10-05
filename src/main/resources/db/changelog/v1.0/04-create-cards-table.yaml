@@ -1,0 +1,96 @@
+databaseChangeLog:
+  - changeSet:
+      id: 04-create-cards-table
+      author: ayungich
+      changes:
+        - createTable:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: card_number
+                  type: varchar(500)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: owner_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiration_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  defaultValue: ACTIVE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: decimal(19,2)
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: CURRENT_TIMESTAMP
+
+        - addForeignKeyConstraint:
+            baseTableName: cards
+            baseColumnNames: owner_id
+            constraintName: fk_cards_owner_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addUniqueConstraint:
+            tableName: cards
+            columnNames: card_number
+            constraintName: uk_cards_card_number
+
+        - createIndex:
+            tableName: cards
+            indexName: idx_card_owner_id
+            columns:
+              - column:
+                  name: owner_id
+
+        - createIndex:
+            tableName: cards
+            indexName: idx_card_status
+            columns:
+              - column:
+                  name: status
+
+        - createIndex:
+            tableName: cards
+            indexName: idx_card_number
+            columns:
+              - column:
+                  name: card_number
+
+        - sql:
+            sql: ALTER TABLE cards ADD CONSTRAINT chk_cards_balance_positive CHECK (balance >= 0)
+
+        - sql:
+            sql: ALTER TABLE cards ADD CONSTRAINT chk_cards_status CHECK (status IN ('ACTIVE', 'BLOCKED', 'EXPIRED'))
+
+      rollback:
+        - dropTable:
+            tableName: cards

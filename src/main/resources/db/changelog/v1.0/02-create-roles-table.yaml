@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 02-create-roles-table
+      author: ayungich
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+        - addUniqueConstraint:
+            tableName: roles
+            columnNames: name
+            constraintName: uk_roles_name
+
+      rollback:
+        - dropTable:
+            tableName: roles

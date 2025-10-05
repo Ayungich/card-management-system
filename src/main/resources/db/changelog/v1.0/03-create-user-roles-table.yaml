@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 03-create-user-roles-table
+      author: ayungich
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: user_roles
+            columnNames: user_id, role_id
+            constraintName: pk_user_roles
+
+        - addForeignKeyConstraint:
+            baseTableName: user_roles
+            baseColumnNames: user_id
+            constraintName: fk_user_roles_user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: user_roles
+            baseColumnNames: role_id
+            constraintName: fk_user_roles_role_id
+            referencedTableName: roles
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createIndex:
+            tableName: user_roles
+            indexName: idx_user_roles_user_id
+            columns:
+              - column:
+                  name: user_id
+
+        - createIndex:
+            tableName: user_roles
+            indexName: idx_user_roles_role_id
+            columns:
+              - column:
+                  name: role_id
+
+      rollback:
+        - dropTable:
+            tableName: user_roles
