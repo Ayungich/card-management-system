@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -140,8 +141,8 @@ public class AdminController {
     @Operation(summary = "Список всех транзакций", description = "Получение списка всех транзакций с фильтрацией")
     public ResponseEntity<Page<TransactionResponse>> getAllTransactions(
             @RequestParam(required = false) TransactionStatus status,
-            @RequestParam(required = false) LocalDateTime startDate,
-            @RequestParam(required = false) LocalDateTime endDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDateTime startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDateTime endDate,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         log.info("Запрос списка всех транзакций");

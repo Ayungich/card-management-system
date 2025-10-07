@@ -39,7 +39,7 @@ class CardNumberGeneratorTest {
     @Test
     void validateCardNumber_WithValidNumber_ShouldReturnTrue() {
         // Given
-        String validCardNumber = "4276123456789012"; // Valid Luhn
+        String validCardNumber = "4532015112830366"; // Valid Luhn (Visa test card)
 
         // When
         boolean isValid = cardNumberGenerator.validateCardNumber(validCardNumber);

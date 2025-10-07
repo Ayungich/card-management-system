@@ -72,6 +72,7 @@ class AuthServiceTest {
         userRole.setName("USER");
 
         User savedUser = User.builder()
+                .id(UUID.randomUUID())
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password("encodedPassword")
