@@ -153,16 +153,16 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
      * @return страница транзакций
      */
     @Query(value = "SELECT * FROM transactions t WHERE " +
-                   "(:status IS NULL OR t.status = :status) AND " +
+                   "(:status IS NULL OR t.status = CAST(:status AS VARCHAR)) AND " +
                    "(:startDate IS NULL OR t.timestamp >= :startDate) AND " +
                    "(:endDate IS NULL OR t.timestamp <= :endDate) " +
                    "ORDER BY t.timestamp DESC",
            countQuery = "SELECT COUNT(*) FROM transactions t WHERE " +
-                       "(:status IS NULL OR t.status = :status) AND " +
+                       "(:status IS NULL OR t.status = CAST(:status AS VARCHAR)) AND " +
                        "(:startDate IS NULL OR t.timestamp >= :startDate) AND " +
                        "(:endDate IS NULL OR t.timestamp <= :endDate)",
            nativeQuery = true)
-    Page<Transaction> findAllWithFilters(@Param("status") TransactionStatus status,
+    Page<Transaction> findAllWithFilters(@Param("status") String status,
                                          @Param("startDate") LocalDateTime startDate,
                                          @Param("endDate") LocalDateTime endDate,
                                          Pageable pageable);
