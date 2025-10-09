@@ -12,8 +12,8 @@ set "current_dir=%current_dir:\=/%"
 
 REM Если параметры не переданы, используем test по умолчанию
 if "%~1"=="" (
-    set "MVN_ARGS=test -Dtest=AuthServiceTest,CardNumberGeneratorTest,CardValidatorTest"
-    echo Running unit tests only (skipping integration tests that require Docker)...
+    set "MVN_ARGS=test"
+    echo Running unit tests (integration tests are excluded in pom.xml)...
 ) else (
     set "MVN_ARGS=%*"
     echo Running custom Maven command...

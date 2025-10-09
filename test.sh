@@ -6,8 +6,8 @@ echo ""
 
 # Если параметры не переданы, запускаем только unit-тесты
 if [ $# -eq 0 ]; then
-    echo "Running unit tests only (skipping integration tests that require Docker)..."
-    MVN_ARGS="test -Dtest=AuthServiceTest,CardNumberGeneratorTest,CardValidatorTest"
+    echo "Running unit tests (integration tests are excluded in pom.xml)..."
+    MVN_ARGS="test"
 else
     echo "Running custom Maven command..."
     MVN_ARGS="$@"
