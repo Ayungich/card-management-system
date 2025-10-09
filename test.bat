@@ -12,12 +12,14 @@ set "current_dir=%current_dir:\=/%"
 
 REM Если параметры не переданы, используем test по умолчанию
 if "%~1"=="" (
-    set "MVN_ARGS=test"
+    set "MVN_ARGS=test -Dtest=AuthServiceTest,CardNumberGeneratorTest,CardValidatorTest"
+    echo Running unit tests only (skipping integration tests that require Docker)...
 ) else (
     set "MVN_ARGS=%*"
+    echo Running custom Maven command...
 )
 
-echo Running: mvn !MVN_ARGS!
+echo Command: mvn !MVN_ARGS!
 echo.
 
 docker run --rm -v "%current_dir%:/app" -w /app maven:3.9-eclipse-temurin-21-alpine mvn !MVN_ARGS!

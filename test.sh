@@ -4,7 +4,19 @@
 echo "Running tests in Docker container with Java 21..."
 echo ""
 
-docker run --rm -v "$(pwd):/app" -w /app maven:3.9-eclipse-temurin-21-alpine mvn "$@"
+# Если параметры не переданы, запускаем только unit-тесты
+if [ $# -eq 0 ]; then
+    echo "Running unit tests only (skipping integration tests that require Docker)..."
+    MVN_ARGS="test -Dtest=AuthServiceTest,CardNumberGeneratorTest,CardValidatorTest"
+else
+    echo "Running custom Maven command..."
+    MVN_ARGS="$@"
+fi
+
+echo "Command: mvn $MVN_ARGS"
+echo ""
+
+docker run --rm -v "$(pwd):/app" -w /app maven:3.9-eclipse-temurin-21-alpine mvn $MVN_ARGS
 
 if [ $? -eq 0 ]; then
     echo ""
