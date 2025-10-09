@@ -7,7 +7,7 @@ echo Running tests in Docker container with Java 21...
 echo.
 
 REM Получаем текущую директорию с прямыми слешами для Docker
-set "current_dir=%cd%"
+for /f "delims=" %%i in ('cd') do set "current_dir=%%i"
 set "current_dir=%current_dir:\=/%"
 
 REM Если параметры не переданы, используем test по умолчанию
