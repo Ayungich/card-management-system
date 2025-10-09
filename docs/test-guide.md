@@ -7,12 +7,20 @@
 ### Команда для запуска всех тестов
 
 ```bash
-docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn test
+docker run --rm -v ${PWD}:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn test
 ```
+
+Или с явным указанием пути (для Windows):
+
+```powershell
+docker run --rm -v E:/projects/cms:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn test
+```
+
+**Важно для Windows:** Используйте прямой слеш `/` вместо обратного `\` в путях Docker.
 
 **Параметры:**
 - `--rm` - автоматически удаляет контейнер после завершения
-- `-v E:\projects\cms:/app` - монтирует текущую директорию проекта в контейнер
+- `-v ${PWD}:/app` или `-v E:/projects/cms:/app` - монтирует текущую директорию проекта в контейнер
 - `-w /app` - устанавливает рабочую директорию в контейнере
 - `maven:3.9-eclipse-temurin-21-alpine` - образ с Maven и Java 21
 
@@ -21,19 +29,19 @@ docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alp
 Для запуска конкретного тестового класса:
 
 ```bash
-docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn test -Dtest=AuthServiceTest
+docker run --rm -v ${PWD}:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn test -Dtest=AuthServiceTest
 ```
 
 Для запуска конкретного метода теста:
 
 ```bash
-docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn test -Dtest=AuthServiceTest#login_WithValidCredentials_ShouldReturnAuthResponse
+docker run --rm -v ${PWD}:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn test -Dtest=AuthServiceTest#login_WithValidCredentials_ShouldReturnAuthResponse
 ```
 
 ### Запуск тестов с отчетом о покрытии (JaCoCo)
 
 ```bash
-docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn clean test jacoco:report
+docker run --rm -v ${PWD}:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn clean test jacoco:report
 ```
 
 Отчет будет доступен в `target/site/jacoco/index.html`
@@ -49,7 +57,7 @@ docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alp
 Если код уже скомпилирован:
 
 ```bash
-docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn surefire:test
+docker run --rm -v ${PWD}:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn surefire:test
 ```
 
 ## Альтернативный способ - запуск в существующем контейнере
@@ -59,7 +67,7 @@ docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alp
 ### 1. Создать временный контейнер
 
 ```bash
-docker run -d --name cms-test --network cms_cms-network -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alpine sleep infinity
+docker run -d --name cms-test --network cms_cms-network -v ${PWD}:/app -w /app maven:3.9-eclipse-temurin-21-alpine sleep infinity
 ```
 
 ### 2. Запустить тесты
@@ -129,7 +137,7 @@ src/test/java/com/ayungi/cms/
 Проверить текущее покрытие:
 
 ```bash
-docker run --rm -v E:\projects\cms:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn clean test jacoco:report
+docker run --rm -v ${PWD}:/app -w /app maven:3.9-eclipse-temurin-21-alpine mvn clean test jacoco:report
 ```
 
 Затем открыть `target/site/jacoco/index.html` в браузере.
