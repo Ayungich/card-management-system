@@ -225,7 +225,8 @@ public class TransferService {
             TransactionStatus status, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable) {
         log.debug("Получение всех транзакций с фильтрами");
 
-        return transactionRepository.findAllWithFilters(status, startDate, endDate, pageable)
+        String statusStr = status != null ? status.name() : null;
+        return transactionRepository.findAllWithFilters(statusStr, startDate, endDate, pageable)
                 .map(transactionMapper::toResponse);
     }
 

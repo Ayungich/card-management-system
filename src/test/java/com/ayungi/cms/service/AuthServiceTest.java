@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -72,6 +73,7 @@ class AuthServiceTest {
         userRole.setName("USER");
 
         User savedUser = User.builder()
+                .id(UUID.randomUUID())
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password("encodedPassword")

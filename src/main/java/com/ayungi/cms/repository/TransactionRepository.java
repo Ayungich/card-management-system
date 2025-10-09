@@ -152,11 +152,17 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
      * @param pageable параметры пагинации
      * @return страница транзакций
      */
-    @Query("SELECT t FROM Transaction t WHERE " +
-           "(:status IS NULL OR t.status = :status) AND " +
-           "(:startDate IS NULL OR t.timestamp >= :startDate) AND " +
-           "(:endDate IS NULL OR t.timestamp <= :endDate)")
-    Page<Transaction> findAllWithFilters(@Param("status") TransactionStatus status,
+    @Query(value = "SELECT * FROM transactions t WHERE " +
+                   "(:status IS NULL OR t.status = CAST(:status AS VARCHAR)) AND " +
+                   "(:startDate IS NULL OR t.timestamp >= :startDate) AND " +
+                   "(:endDate IS NULL OR t.timestamp <= :endDate) " +
+                   "ORDER BY t.timestamp DESC",
+           countQuery = "SELECT COUNT(*) FROM transactions t WHERE " +
+                       "(:status IS NULL OR t.status = CAST(:status AS VARCHAR)) AND " +
+                       "(:startDate IS NULL OR t.timestamp >= :startDate) AND " +
+                       "(:endDate IS NULL OR t.timestamp <= :endDate)",
+           nativeQuery = true)
+    Page<Transaction> findAllWithFilters(@Param("status") String status,
                                          @Param("startDate") LocalDateTime startDate,
                                          @Param("endDate") LocalDateTime endDate,
                                          Pageable pageable);

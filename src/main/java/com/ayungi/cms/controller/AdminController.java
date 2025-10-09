@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -140,13 +142,15 @@ public class AdminController {
     @Operation(summary = "Список всех транзакций", description = "Получение списка всех транзакций с фильтрацией")
     public ResponseEntity<Page<TransactionResponse>> getAllTransactions(
             @RequestParam(required = false) TransactionStatus status,
-            @RequestParam(required = false) LocalDateTime startDate,
-            @RequestParam(required = false) LocalDateTime endDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate endDate,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         log.info("Запрос списка всех транзакций");
         Pageable pageable = PageRequest.of(page, size, Sort.by("timestamp").descending());
-        Page<TransactionResponse> transactions = transferService.getAllTransactions(status, startDate, endDate, pageable);
+        LocalDateTime startDateTime = startDate != null ? startDate.atStartOfDay() : null;
+        LocalDateTime endDateTime = endDate != null ? endDate.atTime(23, 59, 59) : null;
+        Page<TransactionResponse> transactions = transferService.getAllTransactions(status, startDateTime, endDateTime, pageable);
         return ResponseEntity.ok(transactions);
     }
 
