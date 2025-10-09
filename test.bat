@@ -1,19 +1,20 @@
 @echo off
 setlocal enabledelayedexpansion
 
-REM Скрипт для запуска тестов через Docker с Java 21
+REM Script for running tests via Docker with Java 21
 
 echo Running tests in Docker container with Java 21...
 echo.
 
-REM Получаем текущую директорию с прямыми слешами для Docker
-for /f "delims=" %%i in ('cd') do set "current_dir=%%i"
+REM Get current directory with forward slashes for Docker
+set "current_dir=%~dp0"
+set "current_dir=%current_dir:~0,-1%"
 set "current_dir=%current_dir:\=/%"
 
-REM Если параметры не переданы, используем test по умолчанию
+REM If no parameters provided, use test by default
 if "%~1"=="" (
     set "MVN_ARGS=test"
-    echo Running unit tests (integration tests are excluded in pom.xml)...
+    echo Running unit tests (integration tests are excluded in pom.xml^)...
 ) else (
     set "MVN_ARGS=%*"
     echo Running custom Maven command...
