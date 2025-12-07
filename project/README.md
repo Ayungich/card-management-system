@@ -56,5 +56,5 @@ project/
 
 ---
 
-© 2025 Ayungich
+© 2025 Ayungich, sirMatras
 
